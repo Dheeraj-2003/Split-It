@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "410374655425",
+    "project_id": "chatapp-91cb0",
+    "storage_bucket": "chatapp-91cb0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:410374655425:android:31ea124b376f9c98147340",
+        "android_client_info": {
+          "package_name": "ds.learning.chatapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9xldFb7xRD530tHpsY9BMuCVZi3v0yeo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
