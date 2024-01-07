@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ChatApp"
+rootProject.name = "SplitIt"
 include(":app")
  

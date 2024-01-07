@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "ds.learning.chatapp"
+    namespace = "ds.learning.SplitIt"
     compileSdk = 34
 
     defaultConfig {
