@@ -49,6 +49,7 @@ data class ExpenseGroup(
     val groupId: String?="",
     val groupName: String?="",
     var members:MutableList<SplitUser>?=null,
+    var membersId:MutableList<String?>?=null,
     var memberToIndex: MutableMap<String?,Int>?=null,
     var transactions: MutableList<Expense>?=null
 ){
@@ -60,3 +61,8 @@ data class ExpenseGroup(
         "transactions" to transactions
     )
 }
+
+data class trans(
+    val description: String?="",
+    val amount: Int
+)

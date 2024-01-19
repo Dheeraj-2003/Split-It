@@ -1,5 +1,11 @@
 package ds.learning.SplitIt.Screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -86,7 +92,7 @@ fun ChatListScreen(navController: NavController,viewModel : LCViewModel){
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun FAB(
     showDialog:Boolean,
@@ -98,11 +104,14 @@ fun FAB(
         mutableStateOf("")
     }
 
-    if(showDialog){
+    AnimatedVisibility(showDialog){
         AlertDialog(onDismissRequest = {
                                        onDismiss()
             addChatNumber.value=""
-                                       }, confirmButton = {
+                                       },
+            modifier = Modifier.animateEnterExit(enter = slideInVertically() + fadeIn(),
+                exit = slideOutVertically() + fadeOut()
+            ), confirmButton = {
                                            Button(onClick = {
                                                onAddChat(addChatNumber.value)
                                                addChatNumber.value = ""

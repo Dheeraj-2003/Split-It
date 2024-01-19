@@ -56,7 +56,14 @@ fun SplashScreen(navController:NavController,viewModel: LCViewModel){
             delay(1500L)
             val signedIn = viewModel.signIn
             if(signedIn.value==true){
-                navController.navigate(DestinationScreen.StatusList.route)
+                navController.navigate(DestinationScreen.StatusList.route) {
+                    popUpTo(DestinationScreen.splashScreen.route) {
+                        inclusive = true
+                    }
+
+                    launchSingleTop = true
+
+                }
             }
             else{
                 navController.navigate(DestinationScreen.SignUp.route)

@@ -3,6 +3,7 @@ package ds.learning.SplitIt
 import android.icu.util.Calendar
 import android.net.Uri
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -323,9 +324,7 @@ class LCViewModel @Inject constructor(
 
     fun populateGroups(){
         database.collection(GROUP).where(
-            Filter.arrayContains("members", SplitUser(userData.value?.userId,
-                userData.value?.name, userData.value?.imageUrl,
-                userData.value?.number))
+            Filter.arrayContains("membersId", userData.value?.userId)
         ).addSnapshotListener { value, error ->
             if (error == null) {
                 if (value != null) {
@@ -350,6 +349,7 @@ class LCViewModel @Inject constructor(
             members = mutableListOf(SplitUser(userData.value?.userId,
                 userData.value?.name, userData.value?.imageUrl,
                 userData.value?.number)),
+            membersId = mutableListOf(userData.value?.userId),
             memberToIndex = mutableMapOf(userData.value?.number to 0),
             transactions = mutableListOf(Expense(mutableListOf(0)))
         )
@@ -382,8 +382,17 @@ class LCViewModel @Inject constructor(
                                             member.number,
                                         )
                                     )
+                                    it.membersId?.add(member.userId)
                                     it.memberToIndex?.put(member.number!!,n)
                                     var newTrans: MutableList<Expense> = MutableList(n+1){Expense(MutableList(n+1){0})}
+                                    for ( i in 0 until n){
+                                        var row = MutableList(n+1){0}
+                                        val ogRow = og[i].array!!
+                                        for (j in 0 until n){
+                                            row[j] = ogRow[j]
+                                        }
+                                        newTrans[i] = Expense(row)
+                                    }
                                     it.transactions = newTrans
 
                                     database.collection(GROUP).document(id).set(it)
@@ -424,12 +433,13 @@ class LCViewModel @Inject constructor(
         trans = transactionArray
     }
 
-    fun addExpense(amount:Int = 0, number: String = "",groupid:String = ""){
+    fun addExpense(amount:Int = 0, number: String = "", splitInto: MutableList<String> = mutableListOf(""), groupid:String = ""){
         var group = groups.value.find {
             it.groupId == groupid
         }
         val n = group?.members?.size!!
         val mulla = group?.transactions!!
+        val index = group?.memberToIndex!!
         val transactionArray = MutableList(n){MutableList(n){0} }
         for(i in 0 until n){
             val broPlease = mulla[i].array!!
@@ -437,12 +447,14 @@ class LCViewModel @Inject constructor(
                 transactionArray[i][j] = broPlease[j]
             }
         }
-        val distributedAmount = amount/n
+        val m = splitInto.size
+        Log.d("DHEERAJ","m:$m")
+        val distributedAmount = amount/m
         val idx = group.memberToIndex!![number]!!
-        for(i in 0..n-1){
-            if(i!=idx){
-                transactionArray[i][idx] += distributedAmount
-            }
+        splitInto.forEach {
+            Log.d("DHEERAJ","it:$it")
+            val i = index[it]!!
+            transactionArray[i][idx] += distributedAmount
         }
 
         val minFlow = MinCashFlow()
