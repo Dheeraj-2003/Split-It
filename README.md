@@ -1,3 +1,7 @@
+# Split-It App
+
+A splitwise inspired application that splits and simplifies expenses of a group
+
 # Some Pictures of the Demo App
 
 <div align="center">
